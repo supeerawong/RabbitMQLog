@@ -1,0 +1,7 @@
+com\wmsl\wmslworker\ServiceImpl\StorageLogWriterService.class
+com\wmsl\wmslworker\ServiceImpl\RabbitMQLogReaderService.class
+com\wmsl\wmslworker\Service\ILogReaderService.class
+com\wmsl\wmslworker\ServiceImpl\RabbitMQLogReaderService$1.class
+com\wmsl\wmslworker\ServiceImpl\ElasticLogWriterService.class
+com\wmsl\wmslworker\App\RabbitWorker.class
+com\wmsl\wmslworker\Service\ILogWriterService.class
