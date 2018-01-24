@@ -14,20 +14,16 @@ import com.wmsl.wmslworker.ServiceImpl.*;
  */
 public class RabbitWorker {
     public static void main(String[] args) throws Exception {
-        /*String PATH = "E:\\KIBANA\\ReceiveQ\\";
-        String QUEUE_NAME = "logs";
-        String SET_HOST = "localhost";
-        String URL = "http://localhost:9200/test";
-        String TYPE = "test01";*/
-        String PATH = args[0];
-        String QUEUE_NAME = args[1];
-        String SET_HOST = args[2];
-        String URL = args[3];
+        String PATH = args[5];
+        String QUEUE_NAME = args[0];
+        String SET_HOST = args[1];
+        String INDEX = args[3];
+        String URL = args[2]+INDEX;
         String TYPE = args[4];
         ILogReaderService RS = new RabbitMQLogReaderService();
         ILogWriterService WS = new StorageLogWriterService();
         ILogWriterService EW = new ElasticLogWriterService();
-        WS.CleaneFile(PATH, QUEUE_NAME);
+        //WS.CleaneFile(PATH, QUEUE_NAME);
         List<String> message = RS.SReceiveLogs(QUEUE_NAME, SET_HOST);
         while(true){
             if(message.isEmpty()){

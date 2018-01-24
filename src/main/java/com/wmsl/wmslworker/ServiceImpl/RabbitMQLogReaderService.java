@@ -7,10 +7,14 @@ package com.wmsl.wmslworker.ServiceImpl;
 
 import com.wmsl.wmslworker.Service.ILogReaderService;
 import com.rabbitmq.client.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitManagementTemplate;
 
 /**
  *
@@ -49,31 +53,21 @@ public class RabbitMQLogReaderService implements ILogReaderService{
    }
     
     @Override
-    public List<String> SReceiveLogs (String QUEUE_NAME, String SET_HOST) {
-        try{
-            
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost(SET_HOST);
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+    public List<String> SReceiveLogs (String QUEUE_NAME, String SET_HOST) throws Exception {
+    	ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(SET_HOST);
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
             System.out.println(" [*] Waiting for messages. ");
-            QueueingConsumer consumer = new QueueingConsumer(channel);
-            channel.basicConsume(QUEUE_NAME, true, consumer);
-            
-            QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-            while(delivery != null){
-                String message = new String(delivery.getBody());
-                ReceiveSuccess(message);
-                Thread.sleep(10);
-                delivery = consumer.nextDelivery(0);
-            }
-            channel.close();
-            connection.close();
-                
-        }catch (Exception e){  
-        	e.printStackTrace();
-        }
+			GetResponse gr = channel.basicGet(QUEUE_NAME, true);
+			if(gr != null) {
+				String message = new String(gr.getBody());
+				ReceiveSuccess(message);
+				System.out.println(message);
+			}
+            	
+        channel.close();
+        connection.close();
         return remessage;
     }
     
